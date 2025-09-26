@@ -24,7 +24,7 @@ jobs:
       run: ls -alh
                             
     - name: Build the Docker image
-      run: docker build -t sanskrutibagul/wisecow:v1 .
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/wisecow:v1 .
     
         # - name: Docker login
         #run:  docker login -u username -p password 
