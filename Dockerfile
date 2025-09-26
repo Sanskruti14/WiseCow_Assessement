@@ -8,7 +8,7 @@ RUN apt-get update -y && \
 WORKDIR /wisdom
 
 # Copy the bash script into the container
-COPY wisecow/wisecow.sh .
+COPY ./wisecow/wisecow.sh .
 
 # Expose port 4499 for external access
 EXPOSE 4499
