@@ -16,7 +16,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
                             
     - name: Build the Docker image
-      run: docker build ./WiseCow_Assessement -t sanskrutibagul/wisecow:v1
+      run: docker build -t sanskrutibagul/wisecow:v1 .
     - name: push image to docker hub
       run:  docker push sanskrutibagul/wisecow:v1
 
