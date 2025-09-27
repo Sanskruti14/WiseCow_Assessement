@@ -29,5 +29,5 @@ jobs:
         # - name: Docker login
         #run:  docker login -u username -p password 
     - name: push image to docker hub
-      run:  docker push sanskrutibagul/wisecow:v1
+      run:  docker push sanskrutibagul/wisecow:${{ github.sha }}
 
