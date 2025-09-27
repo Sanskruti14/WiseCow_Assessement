@@ -1,4 +1,4 @@
-name: Build and Push The Image to Docker Hubi
+name: Build-Push-Image
 
 on:
  push:
@@ -24,7 +24,7 @@ jobs:
       run: ls -alh
                             
     - name: Build the Docker image
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/wisecow:v1 .
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/wisecow:${{ github.sha }} .
     
         # - name: Docker login
         #run:  docker login -u username -p password 
