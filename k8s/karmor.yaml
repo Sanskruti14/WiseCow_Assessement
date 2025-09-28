@@ -1,0 +1,26 @@
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: deny-bash
+  namespace: wisecow
+spec:
+  selector:
+    matchLabels:
+      app: wisecow-app
+  process:
+    matchPaths:
+      - path: "/usr/bin/ls"
+      - path: "/bin/bash"
+        action: Block
+      - path: "/usr/bin/bash"
+        action: Block
+      - path: "/bin/sh"
+        action: Block
+      - path: "/usr/bin/sh"
+        action: Block
+      - path: "/usr/bin/ls"
+        action: Block
+  file:
+    matchPaths:
+      - path: "/etc/passwd"
+        action: Block

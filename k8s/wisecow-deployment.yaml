@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wisecow-app
+  namespace: wisecow
   labels:
     app: wisecow-app
 spec:
@@ -16,7 +17,7 @@ spec:
     spec:
       containers:
         - name: wisecow-app
-          image: sanskrutibagul/wisecow:v1
+          image: sanskrutibagul/wisecow:b2e73fe7bda202a35f1aeead0fdf94f850144b4a
             #command: ["/bin/bash", "-c", "/code/entrypoint.sh"]
           ports:
             - containerPort: 4499
