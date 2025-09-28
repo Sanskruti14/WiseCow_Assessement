@@ -25,13 +25,13 @@ jobs:
 
     - name: Git pull on host-1
       run: |
-             ssh ${{ secrets.HOST_USERNAME }}@${{ secrets.HOST_IP }} "
+             ssh ${{ secrets.HOST_USERNAME }}@${{ secrets.HOST_IP }} '
       if [ -d ~/WiseCow_Assessement/.git ]; then
         cd ~/WiseCow_Assessement/ && git pull origin main;
       else
         git clone https://github.com/your-org/your-repo.git ~/WiseCow_Assessement/;
       fi
-      "
+      '
 
     - name: Update Image name in deployment file
       run: |
