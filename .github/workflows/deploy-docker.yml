@@ -1,0 +1,45 @@
+name: Deploy-Image
+
+on:
+ workflow_run:
+   workflows: ["Build-Push-Image"]
+   types:
+     - completed
+       
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps: 
+    - name: git checkout
+      uses: actions/checkout@v4
+    - name: docker login  
+      uses: docker/login-action@v3 
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Show current directory
+      run: pwd
+
+    - name: List files in current directory
+      run: ls -alh
+
+    - name: Git pull on host-1
+      run: |
+             ssh ${{ secrets.HOST_USERNAME }}@${{ secrets.HOST_IP }} "
+      if [ -d ~/WiseCow_Assessement/.git ]; then
+        cd ~/WiseCow_Assessement/ && git pull origin main;
+      else
+        git clone https://github.com/your-org/your-repo.git ~/WiseCow_Assessement/;
+      fi
+      "
+
+    - name: Update Image name in deployment file
+      run: |
+        ssh ${{ secrets.HOST_USERNAME }}@${{ secrets.HOST_IP }} "cd ~/WiseCow_Assessement/ && \
+        sed -i 's|image: ${{ secrets.DOCKER_USERNAME }}/wisecow:.*|image: ${{ secrets.DOCKER_USERNAME }}/wisecow:${{ github.sha }}|' k8s/wisecow-deployment.yaml"
+
+    - name: Apply deployment
+      run: |
+        ssh ${{ secrets.HOST_USERNAME }}@${{ secrets.HOST_IP }} "cd ~/WiseCow_Assessement/ && kubectl apply -f k8s/wisecow-deployment.yaml"
+
+
