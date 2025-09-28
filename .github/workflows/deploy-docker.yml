@@ -31,11 +31,17 @@ jobs:
         git clone https://github.com/your-org/your-repo.git ~/WiseCow_Assessement/; \
         fi
         '
+    - name: Create SSL key and cert files on host-1
+      run: |
+        ssh ${{ secrets.HOST_USERNAME }}@${{ secrets.HOST_IP }} "echo '${{ secrets.SSL_CERT }}' > /tmp/wisecow.crt && echo '${{ secrets.SSL_KEY }}' > /tmp/wisecow.key"
 
+    - name: Create/Update SSL Key/Cert
+      run: |
+        ssh ${{ secrets.HOST_USERNAME }}@${{ secrets.HOST_IP }} "kubectl create secret tls wisecow-tls --key /tmp/wisecow.key --cert /tmp/wisecow.crt --dry-run=client -o yaml | kubectl apply -f - && rm -f /tmp/wisecow.crt /tmp/wisecow.key"
+  
     - name: Update Image name in deployment file
       run: |
-        ssh ${{ secrets.HOST_USERNAME }}@${{ secrets.HOST_IP }} "cd ~/WiseCow_Assessement/ && \
-        sed -i 's|image: ${{ secrets.DOCKER_USERNAME }}/wisecow:.*|image: ${{ secrets.DOCKER_USERNAME }}/wisecow:${{ github.sha }}|' k8s/wisecow-deployment.yaml"
+        ssh ${{ secrets.HOST_USERNAME }}@${{ secrets.HOST_IP }} "cd ~/WiseCow_Assessement/ && sed -i 's|image: ${{ secrets.DOCKER_USERNAME }}/wisecow:.*|image: ${{ secrets.DOCKER_USERNAME }}/wisecow:${{ github.sha }}|' k8s/wisecow-deployment.yaml"
 
     - name: Apply deployment
       run: |
